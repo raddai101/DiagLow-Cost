@@ -1,0 +1,13 @@
+# Dependances
+node_modules/
+.next/
+diaglowcost-frontend/node_modules/
+diaglowcost-frontend/.next/
+
+# Backend
+diaglowcost-backend/data/chroma/
+diaglowcost-backend/data/raw/*.tsv
+diaglowcost-backend/.venv/
+diaglowcost-backend/.env
+
+*.zip
