@@ -1,15 +1,4 @@
-import type { Metadata } from "next";
 import "./globals.css";
-
-export const metadata: Metadata = {
-  title: "DiagLow-Cost | Clinical RAG Assistant",
-  description: "Interface mobile-first pour l'assistant RAG DiagLow-Cost.",
-};
-
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return (
-    <html lang="fr">
-      <body>{children}</body>
-    </html>
-  );
-}
+import type { Metadata } from "next";
+export const metadata: Metadata={title:"DiagLow-Cost — Clinical Assistant",description:"DiagLow-Cost — Clinical Assistant",icons:{icon:"/icon.svg"}};
+export default function RootLayout({children}:{children:React.ReactNode}){return <html lang="en" suppressHydrationWarning><body>{children}</body></html>}
