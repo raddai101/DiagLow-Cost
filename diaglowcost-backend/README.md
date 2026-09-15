@@ -1,16 +1,16 @@
 # DiagLowCost Backend
 
-Backend API de la plateforme **DiagLowCost**, destiné à fournir un service de questions-réponses intelligent basé sur **RAG (Retrieval-Augmented Generation)**, avec recherche sémantique, base documentaire, modèle LLM local et mémoire persistante des conversations.
+Backend API for the **DiagLowCost** platform, designed to provide an intelligent question-and-answer service based on **RAG (Retrieval-Augmented Generation)**, with semantic search, a document database, a local LLM, and persistent conversation memory.
 
-Ce document est destiné en particulier aux **développeurs Front-End** qui doivent intégrer l’API dans une application Web ou mobile.
+This document is primarily intended for **Front-End developers** who need to integrate the API into a Web or mobile application.
 
 ---
 
-## 1. Présentation
+## 1. Overview
 
-DiagLowCost permet à un utilisateur de poser des questions à une intelligence artificielle.
+DiagLowCost allows users to ask questions to an artificial intelligence system.
 
-Lorsqu'une question est envoyée :
+When a question is submitted:
 
 ```text
 Frontend
@@ -19,54 +19,54 @@ Frontend
    ▼
 FastAPI
    │
-   ├── Gestion de la session
+   ├── Session management
    │
-   ├── Chargement de l'historique
+   ├── History loading
    │
-   ├── RAG / recherche documentaire
+   ├── RAG / document retrieval
    │
    ├── LangGraph
    │
    └── Ollama / Qwen3
            │
            ▼
-       Réponse IA
+        AI response
            │
            ▼
-      PostgreSQL
-   sauvegarde conversation
+       PostgreSQL
+   conversation storage
 ```
 
-Le système conserve l'historique des conversations afin que l'utilisateur puisse poser des questions complémentaires sans devoir répéter tout le contexte.
+The system keeps conversation history so that users can ask follow-up questions without having to repeat the entire context.
 
 ---
 
-# 2. Technologies utilisées
+# 2. Technologies Used
 
 ## Backend
 
-| Technologie           | Utilisation                        |
-| --------------------- | ---------------------------------- |
-| Python                | Langage principal                  |
-| FastAPI               | Framework API REST                 |
-| Uvicorn               | Serveur ASGI                       |
-| Pydantic              | Validation des données             |
-| SQLAlchemy            | ORM / accès base de données        |
-| PostgreSQL            | Base de données applicative        |
-| ChromaDB              | Base vectorielle                   |
-| Sentence Transformers | Génération des embeddings          |
-| LangGraph             | Orchestration du workflow IA       |
-| Ollama                | Exécution locale du LLM            |
-| Qwen3 1.7B            | Modèle de génération               |
-| BGE-M3                | Modèle d'embeddings prévu/supporté |
-| Git                   | Gestion du code                    |
+| Technology            | Usage                             |
+| --------------------- | --------------------------------- |
+| Python                | Main programming language         |
+| FastAPI               | REST API framework                |
+| Uvicorn               | ASGI server                       |
+| Pydantic              | Data validation                   |
+| SQLAlchemy            | ORM / database access             |
+| PostgreSQL            | Application database              |
+| ChromaDB              | Vector database                   |
+| Sentence Transformers | Embedding generation              |
+| LangGraph             | AI workflow orchestration         |
+| Ollama                | Local LLM execution               |
+| Qwen3 1.7B            | Generation model                  |
+| BGE-M3                | Supported/planned embedding model |
+| Git                   | Source code management            |
 
-## Architecture IA
+## AI Architecture
 
-Le backend utilise principalement :
+The backend mainly uses:
 
 ```text
-Question utilisateur
+User Question
         │
         ▼
    FastAPI API
@@ -90,45 +90,45 @@ Question utilisateur
            via Ollama
                 │
                 ▼
-             Réponse
+             Response
 ```
 
 ---
 
-# 3. Prérequis
+# 3. Prerequisites
 
-Le backend nécessite :
+The backend requires:
 
 * Python 3.x
 * PostgreSQL
 * Ollama
 * Git
 
-Le modèle actuellement utilisé est :
+The currently used model is:
 
 ```text
 qwen3:1.7b
 ```
 
-Les embeddings utilisent :
+Embeddings use:
 
 ```text
 sentence-transformers/all-MiniLM-L6-v2
 ```
 
-Le système peut également utiliser :
+The system can also use:
 
 ```text
 bge-m3
 ```
 
-selon la configuration.
+depending on the configuration.
 
 ---
 
 # 4. Installation
 
-## 4.1 Cloner le projet
+## 4.1 Clone the project
 
 ```bash
 git clone <repository-url>
@@ -137,21 +137,21 @@ cd diaglowcost-backend
 
 ---
 
-## 4.2 Créer l'environnement virtuel
+## 4.2 Create the virtual environment
 
-Windows :
+Windows:
 
 ```powershell
 python -m venv .venv
 ```
 
-Activation :
+Activate it:
 
 ```powershell
 .\.venv\Scripts\Activate.ps1
 ```
 
-Linux/macOS :
+Linux/macOS:
 
 ```bash
 python3 -m venv .venv
@@ -160,13 +160,13 @@ source .venv/bin/activate
 
 ---
 
-# 5. Installation des dépendances
+# 5. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Les principales dépendances sont :
+The main dependencies include:
 
 ```text
 fastapi
@@ -183,9 +183,9 @@ python-dotenv
 
 ---
 
-# 6. Configuration `.env`
+# 6. `.env` Configuration
 
-Exemple de configuration :
+Example configuration:
 
 ```env
 APP_NAME=diaglowcost-backend
@@ -217,27 +217,27 @@ CHROMA_COLLECTION=druglib
 
 ---
 
-# 7. Démarrer Ollama
+# 7. Start Ollama
 
-Vérifier qu'Ollama fonctionne :
+Check that Ollama is running:
 
 ```bash
 ollama list
 ```
 
-Le modèle doit être disponible :
+The model should be available:
 
 ```text
 qwen3:1.7b
 ```
 
-Si nécessaire :
+If necessary:
 
 ```bash
 ollama pull qwen3:1.7b
 ```
 
-Ollama fonctionne normalement sur :
+Ollama normally runs on:
 
 ```text
 http://127.0.0.1:11434
@@ -245,15 +245,15 @@ http://127.0.0.1:11434
 
 ---
 
-# 8. Base de données PostgreSQL
+# 8. PostgreSQL Database
 
-La base utilisée par l'application est :
+The database used by the application is:
 
 ```text
 diaglowcost
 ```
 
-Exemple :
+Example:
 
 ```text
 Host: 127.0.0.1
@@ -262,7 +262,7 @@ Database: diaglowcost
 User: diaglowcost
 ```
 
-La base contient notamment les données liées aux conversations :
+The database contains, among other things, conversation-related data:
 
 ```text
 chat_sessions
@@ -271,29 +271,29 @@ chat_messages
 
 ---
 
-# 9. Base vectorielle RAG
+# 9. RAG Vector Database
 
-Le moteur RAG utilise **ChromaDB**.
+The RAG engine uses **ChromaDB**.
 
-La collection principale est :
+The main collection is:
 
 ```text
 druglib
 ```
 
-Répertoire :
+Directory:
 
 ```text
 data/chroma
 ```
 
-Le corpus d'entraînement contient actuellement environ :
+The training corpus currently contains approximately:
 
 ```text
 3107 documents
 ```
 
-avec une dimension d'embedding de :
+with an embedding dimension of:
 
 ```text
 384
@@ -301,16 +301,16 @@ avec une dimension d'embedding de :
 
 ---
 
-# 10. Construire l'index RAG
+# 10. Build the RAG Index
 
-Avant d'utiliser la recherche documentaire :
+Before using document retrieval:
 
 ```powershell
 $env:PYTHONPATH="."
 python scripts/build_index.py
 ```
 
-Le résultat attendu est similaire à :
+Expected output is similar to:
 
 ```text
 ChromaDB RAG index built from TRAIN only:
@@ -322,28 +322,28 @@ path=data/chroma
 
 ---
 
-# 11. Démarrer l'API
+# 11. Start the API
 
-Depuis la racine du projet :
+From the project root:
 
 ```powershell
 $env:PYTHONPATH="."
 python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
 ```
 
-L'API est alors disponible sur :
+The API is then available at:
 
 ```text
 http://127.0.0.1:8000
 ```
 
-Documentation Swagger :
+Swagger documentation:
 
 ```text
 http://127.0.0.1:8000/docs
 ```
 
-Documentation OpenAPI :
+OpenAPI documentation:
 
 ```text
 http://127.0.0.1:8000/openapi.json
@@ -351,21 +351,21 @@ http://127.0.0.1:8000/openapi.json
 
 ---
 
-# 12. URL de base pour le Front-End
+# 12. Base URL for the Front-End
 
-En développement local :
+For local development:
 
 ```text
 http://127.0.0.1:8000
 ```
 
-La plupart des endpoints commencent par :
+Most endpoints start with:
 
 ```text
 /api/v1
 ```
 
-Donc :
+Therefore:
 
 ```text
 http://127.0.0.1:8000/api/v1
@@ -375,27 +375,27 @@ http://127.0.0.1:8000/api/v1
 
 # 13. CORS
 
-Le backend autorise le Front-End configuré dans :
+The backend authorizes the Front-End configured in:
 
 ```env
 CORS_ORIGINS=http://localhost:3000
 ```
 
-Si le Front-End React/Next.js/Vue fonctionne sur un autre port, modifier cette variable.
+If the React/Next.js/Vue Front-End runs on another port, modify this variable.
 
-Exemple :
+Example:
 
 ```env
 CORS_ORIGINS=http://localhost:5173
 ```
 
-Pour un Front-End React avec Vite :
+For a React application using Vite:
 
 ```text
 http://localhost:5173
 ```
 
-Pour un Front-End Next.js :
+For a Next.js application:
 
 ```text
 http://localhost:3000
@@ -403,7 +403,7 @@ http://localhost:3000
 
 ---
 
-# 14. Liste des endpoints
+# 14. Endpoint List
 
 ## Health Check
 
@@ -411,9 +411,9 @@ http://localhost:3000
 GET /api/v1/health
 ```
 
-Permet au Front-End de vérifier que le backend fonctionne.
+Allows the Front-End to verify that the backend is running.
 
-### Réponse
+### Response
 
 ```json
 {
@@ -424,7 +424,7 @@ Permet au Front-End de vérifier que le backend fonctionne.
 }
 ```
 
-### Exemple JavaScript
+### JavaScript Example
 
 ```javascript
 const response = await fetch(
@@ -438,15 +438,15 @@ console.log(data);
 
 ---
 
-# 15. Statistiques RAG
+# 15. RAG Statistics
 
 ```http
 GET /api/v1/rag/stats
 ```
 
-Retourne l'état du moteur de recherche documentaire.
+Returns the status of the document retrieval engine.
 
-### Réponse
+### Response
 
 ```json
 {
@@ -458,9 +458,9 @@ Retourne l'état du moteur de recherche documentaire.
 }
 ```
 
-### Utilisation Front-End
+### Front-End Usage
 
-Cet endpoint peut être utilisé dans une page :
+This endpoint can be used on a page such as:
 
 ```text
 Administration
@@ -473,15 +473,15 @@ Administration
 
 ---
 
-# 16. Créer une session de conversation
+# 16. Create a Conversation Session
 
 ```http
 POST /api/v1/sessions
 ```
 
-Une session représente une conversation entre un utilisateur et l'IA.
+A session represents a conversation between a user and the AI.
 
-### Exemple
+### Example
 
 ```http
 POST http://127.0.0.1:8000/api/v1/sessions
@@ -490,17 +490,17 @@ Content-Type: application/json
 
 ### Body
 
-Si l'API ne nécessite pas de paramètres supplémentaires :
+If the API does not require additional parameters:
 
 ```json
 {}
 ```
 
-### Réponse
+### Response
 
-Le backend retourne un identifiant de session.
+The backend returns a session identifier.
 
-Exemple conceptuel :
+Conceptual example:
 
 ```json
 {
@@ -508,9 +508,9 @@ Exemple conceptuel :
 }
 ```
 
-Le Front-End doit conserver cet identifiant.
+The Front-End should store this identifier.
 
-Par exemple :
+For example:
 
 ```javascript
 localStorage.setItem("session_id", data.id);
@@ -518,23 +518,23 @@ localStorage.setItem("session_id", data.id);
 
 ---
 
-# 17. Récupérer les messages d'une session
+# 17. Retrieve Session Messages
 
 ```http
 GET /api/v1/sessions/{session_id}/messages
 ```
 
-Exemple :
+Example:
 
 ```http
 GET /api/v1/sessions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/messages
 ```
 
-Cet endpoint permet de reconstruire l'interface de chat.
+This endpoint allows the Front-End to reconstruct the chat interface.
 
-### Utilisation
+### Usage
 
-Lorsque l'utilisateur ouvre une conversation :
+When the user opens a conversation:
 
 ```text
 Frontend
@@ -547,23 +547,23 @@ Backend
 PostgreSQL
    │
    ▼
-Historique
+History
    │
    ▼
 Frontend
 ```
 
-Le Front-End peut ensuite afficher :
+The Front-End can then display:
 
 ```text
-Utilisateur:
-Bonjour...
+User:
+Hello...
 
 Assistant:
-Bonjour, comment puis-je vous aider ?
+Hello, how can I help you?
 
-Utilisateur:
-Peux-tu préciser ?
+User:
+Can you provide more details?
 
 Assistant:
 ...
@@ -571,17 +571,17 @@ Assistant:
 
 ---
 
-# 18. Recherche RAG
+# 18. RAG Search
 
 ```http
 POST /api/v1/rag/search
 ```
 
-Cet endpoint permet au Front-End ou à un outil d'administration de tester directement la recherche documentaire sans demander une génération complète à l'IA.
+This endpoint allows the Front-End or an administration tool to directly test document retrieval without requesting a complete AI-generated response.
 
 ### Body
 
-Exemple :
+Example:
 
 ```json
 {
@@ -590,11 +590,11 @@ Exemple :
 }
 ```
 
-### Réponse
+### Response
 
-Le backend retourne les documents les plus proches de la question.
+The backend returns the documents that are most relevant to the query.
 
-Exemple conceptuel :
+Conceptual example:
 
 ```json
 {
@@ -613,44 +613,44 @@ Exemple conceptuel :
 }
 ```
 
-Le format exact des métadonnées dépend du corpus.
+The exact metadata format depends on the corpus.
 
 ---
 
-# 19. Chat IA
+# 19. AI Chat
 
-## Endpoint principal
+## Main Endpoint
 
 ```http
 POST /api/v1/chat
 ```
 
-C'est **l'endpoint principal que le Front-End doit utiliser pour le chatbot**.
+This is **the main endpoint that the Front-End should use for the chatbot**.
 
-Le Front-End envoie une question au backend.
+The Front-End sends a question to the backend.
 
-Le backend :
+The backend:
 
-1. récupère la session ;
-2. récupère l'historique ;
-3. effectue la recherche RAG ;
-4. exécute le workflow LangGraph ;
-5. envoie le contexte au modèle Qwen3 ;
-6. génère la réponse ;
-7. sauvegarde la question ;
-8. sauvegarde la réponse ;
-9. retourne la réponse au Front-End.
+1. retrieves the session;
+2. retrieves the conversation history;
+3. performs RAG document retrieval;
+4. executes the LangGraph workflow;
+5. sends the context to the Qwen3 model;
+6. generates the response;
+7. saves the user question;
+8. saves the AI response;
+9. returns the response to the Front-End.
 
 ---
 
-# 20. Exemple de requête Chat
+# 20. Chat Request Example
 
 ```http
 POST /api/v1/chat
 Content-Type: application/json
 ```
 
-Body :
+Body:
 
 ```json
 {
@@ -662,7 +662,7 @@ Body :
 
 ---
 
-# 21. Exemple JavaScript
+# 21. JavaScript Example
 
 ```javascript
 const sessionId = localStorage.getItem("session_id");
@@ -689,11 +689,11 @@ console.log(data);
 
 ---
 
-# 22. Réponse du Chat
+# 22. Chat Response
 
-La réponse contient la réponse générée ainsi que les informations liées aux sources utilisées.
+The response contains the generated answer as well as information about the sources used.
 
-Exemple conceptuel :
+Conceptual example:
 
 ```json
 {
@@ -707,23 +707,23 @@ Exemple conceptuel :
 }
 ```
 
-Le Front-End doit principalement afficher :
+The Front-End should mainly display:
 
 ```text
 answer
 ```
 
-et peut éventuellement afficher les :
+and can optionally display:
 
 ```text
 sources
 ```
 
-dans une section :
+in a section such as:
 
 ```text
-Sources utilisées
------------------
+Sources Used
+------------
 [2202]
 [1845]
 [927]
@@ -731,13 +731,13 @@ Sources utilisées
 
 ---
 
-# 23. Gestion de la mémoire conversationnelle
+# 23. Conversation Memory Management
 
-La mémoire est persistante.
+Memory is persistent.
 
-Elle est stockée dans PostgreSQL.
+It is stored in PostgreSQL.
 
-Structure simplifiée :
+Simplified structure:
 
 ```text
 chat_sessions
@@ -749,9 +749,9 @@ chat_sessions
 chat_messages
 ```
 
-Une session peut donc contenir plusieurs messages.
+A session can therefore contain multiple messages.
 
-Exemple :
+Example:
 
 ```text
 Session A
@@ -766,9 +766,9 @@ Session A
 
 ---
 
-# 24. Exemple de conversation avec mémoire
+# 24. Example of a Conversation with Memory
 
-### Première question
+### First question
 
 ```json
 {
@@ -777,9 +777,9 @@ Session A
 }
 ```
 
-L'IA répond.
+The AI responds.
 
-Ensuite le Front-End envoie :
+The Front-End can then send:
 
 ```json
 {
@@ -788,31 +788,31 @@ Ensuite le Front-End envoie :
 }
 ```
 
-Le backend récupère l'historique.
+The backend retrieves the conversation history.
 
-L'IA comprend que :
+The AI understands that:
 
 ```text
 "its"
 ```
 
-fait référence au sujet précédent :
+refers to the previous topic:
 
 ```text
 depression
 ```
 
-Il n'est donc pas nécessaire de renvoyer toute la conversation depuis le Front-End.
+The Front-End therefore does not need to send the entire conversation again.
 
-Le `session_id` suffit pour permettre au backend de retrouver la mémoire.
+The `session_id` is sufficient for the backend to retrieve the conversation memory.
 
 ---
 
-# 25. Rôle de LangGraph
+# 25. Role of LangGraph
 
-LangGraph orchestre le processus de génération.
+LangGraph orchestrates the generation process.
 
-Conceptuellement :
+Conceptually:
 
 ```text
 START
@@ -836,9 +836,9 @@ Answer
 END
 ```
 
-Le Front-End n'a pas besoin de connaître les détails internes de LangGraph.
+The Front-End does not need to know the internal details of LangGraph.
 
-Il communique uniquement avec :
+It only communicates with:
 
 ```http
 POST /api/v1/chat
@@ -846,11 +846,11 @@ POST /api/v1/chat
 
 ---
 
-# 26. Rôle de ChromaDB
+# 26. Role of ChromaDB
 
-ChromaDB est utilisé comme **vector database**.
+ChromaDB is used as the **vector database**.
 
-Lors de la recherche :
+During retrieval:
 
 ```text
 Question
@@ -865,7 +865,7 @@ ChromaDB
 Top K documents
 ```
 
-Par exemple :
+For example:
 
 ```json
 {
@@ -874,46 +874,46 @@ Par exemple :
 }
 ```
 
-Le backend récupère les 5 documents les plus proches sémantiquement.
+The backend retrieves the five documents that are semantically closest to the question.
 
 ---
 
-# 27. Rôle de Sentence Transformers
+# 27. Role of Sentence Transformers
 
-Le modèle d'embedding transforme une phrase en vecteur.
+The embedding model transforms a sentence into a vector.
 
-Exemple :
+Example:
 
 ```text
 "What is depression?"
 ```
 
-devient approximativement :
+becomes approximately:
 
 ```text
 [0.021, -0.183, 0.074, ...]
 ```
 
-Ces vecteurs sont stockés dans ChromaDB.
+These vectors are stored in ChromaDB.
 
-Cela permet de rechercher des documents selon leur **sens**, et pas seulement selon les mots exacts.
+This allows documents to be searched according to their **meaning**, rather than only matching exact words.
 
 ---
 
-# 28. Rôle d'Ollama
+# 28. Role of Ollama
 
-Ollama permet d'exécuter le modèle localement.
+Ollama allows the model to run locally.
 
-Configuration :
+Configuration:
 
 ```env
 OLLAMA_BASE_URL=http://127.0.0.1:11434
 OLLAMA_LLM_MODEL=qwen3:1.7b
 ```
 
-Le Front-End ne communique normalement **pas directement avec Ollama**.
+The Front-End normally does **not** communicate directly with Ollama.
 
-Architecture recommandée :
+Recommended architecture:
 
 ```text
 Frontend
@@ -931,13 +931,13 @@ Ollama
 Qwen3
 ```
 
-Le Front-End doit donc appeler FastAPI.
+The Front-End should therefore call FastAPI.
 
 ---
 
-# 29. Technologies Front-End compatibles
+# 29. Compatible Front-End Technologies
 
-L'API REST peut être utilisée avec :
+The REST API can be used with:
 
 * React
 * Next.js
@@ -946,15 +946,15 @@ L'API REST peut être utilisée avec :
 * Svelte
 * Flutter
 * React Native
-* application JavaScript classique
+* Plain JavaScript applications
 
-Aucune bibliothèque Front-End particulière n'est imposée.
+No specific Front-End library is required.
 
 ---
 
-# 30. Exemple d'architecture React
+# 30. Example React Architecture
 
-Une architecture possible :
+A possible architecture:
 
 ```text
 src/
@@ -981,7 +981,7 @@ src/
 
 ---
 
-# 31. Exemple de client API
+# 31. API Client Example
 
 ```javascript
 const API_URL = "http://127.0.0.1:8000/api/v1";
@@ -1010,7 +1010,7 @@ export async function apiFetch(endpoint, options = {}) {
 
 ---
 
-# 32. Exemple de service Chat
+# 32. Chat Service Example
 
 ```javascript
 import { apiFetch } from "./client";
@@ -1032,7 +1032,7 @@ export async function sendMessage(
 
 ---
 
-# 33. Exemple de service Session
+# 33. Session Service Example
 
 ```javascript
 import { apiFetch } from "./client";
@@ -1045,7 +1045,7 @@ export async function createSession() {
 }
 ```
 
-Récupération de l'historique :
+Retrieve conversation history:
 
 ```javascript
 export async function getMessages(sessionId) {
@@ -1057,33 +1057,33 @@ export async function getMessages(sessionId) {
 
 ---
 
-# 34. Flux recommandé côté Front-End
+# 34. Recommended Front-End Flow
 
-## Première ouverture
+## First Application Launch
 
 ```text
-1. Frontend démarre
+1. Frontend starts
         │
         ▼
-2. Vérifier session_id
+2. Check session_id
         │
-        ├── Existe → charger messages
+        ├── Exists → load messages
         │
-        └── N'existe pas
+        └── Does not exist
                   │
                   ▼
             POST /sessions
                   │
                   ▼
-             sauvegarder ID
+             save ID
 ```
 
 ---
 
-## Envoi d'un message
+## Sending a Message
 
 ```text
-Utilisateur écrit :
+User types:
 "Explain depression"
 
           │
@@ -1094,22 +1094,22 @@ POST /chat
           │
           ▼
 
-Afficher "Assistant écrit..."
+Display "Assistant is typing..."
 
           │
           ▼
 
-Réponse API
+API response
 
           │
           ▼
 
-Ajouter message à l'interface
+Add message to the interface
 ```
 
 ---
 
-# 35. Exemple complet de flux
+# 35. Complete Flow Example
 
 ```javascript
 async function sendChatMessage(message) {
@@ -1138,66 +1138,66 @@ async function sendChatMessage(message) {
 
 ---
 
-# 36. Gestion des erreurs
+# 36. Error Handling
 
-Le Front-End doit gérer au minimum :
+The Front-End should handle at least the following cases.
 
-### Backend indisponible
+### Backend unavailable
 
 ```text
 Failed to fetch
 ```
 
-Afficher :
+Display:
 
 ```text
-Impossible de contacter le serveur.
-Vérifiez que le backend est démarré.
+Unable to contact the server.
+Please make sure the backend is running.
 ```
 
-### Erreur HTTP
+### HTTP error
 
 ```text
 400
 ```
 
-Afficher :
+Display:
 
 ```text
-Requête invalide.
+Invalid request.
 ```
 
-### Erreur serveur
+### Server error
 
 ```text
 500
 ```
 
-Afficher :
+Display:
 
 ```text
-Une erreur interne est survenue.
+An internal server error occurred.
 ```
 
-### Ollama indisponible
+### Ollama unavailable
 
-Si le backend ne peut pas contacter Ollama :
+If the backend cannot contact Ollama:
 
 ```text
-Le service IA est temporairement indisponible.
+The AI service is temporarily unavailable.
 ```
 
 ---
 
-# 37. Tester l'API avec Swagger
+# 37. Test the API with Swagger
 
-Une fois le backend lancé :
+Once the backend is running:
 
 ```text
 http://127.0.0.1:8000/docs
 ```
 
-Swagger permet de tester directement :
+Swagger allows you to directly test:
 
 ```text
 GET  /api/v1/health
@@ -1210,13 +1210,13 @@ POST /api/v1/rag/search
 POST /api/v1/chat
 ```
 
-C'est particulièrement utile pour le développeur Front-End avant de commencer l'intégration.
+This is particularly useful for Front-End developers before starting the integration.
 
 ---
 
-# 38. Tester avec PowerShell
+# 38. Test with PowerShell
 
-Health :
+Health check:
 
 ```powershell
 Invoke-RestMethod `
@@ -1224,7 +1224,7 @@ Invoke-RestMethod `
   -Uri "http://127.0.0.1:8000/api/v1/health"
 ```
 
-RAG :
+RAG:
 
 ```powershell
 Invoke-RestMethod `
@@ -1234,9 +1234,9 @@ Invoke-RestMethod `
 
 ---
 
-# 39. Tester le Chat
+# 39. Test the Chat
 
-Exemple :
+Example:
 
 ```powershell
 $body = @{
@@ -1252,19 +1252,19 @@ Invoke-RestMethod `
   -Body $body
 ```
 
-Remplacer :
+Replace:
 
 ```text
 SESSION_ID
 ```
 
-par l'identifiant réel de la session.
+with the actual session identifier.
 
 ---
 
-# 40. Variables importantes pour le Front-End
+# 40. Important Variables for the Front-End
 
-Le développeur Front-End doit principalement connaître :
+The Front-End developer mainly needs to know:
 
 ```env
 HOST=0.0.0.0
@@ -1272,7 +1272,7 @@ PORT=8000
 CORS_ORIGINS=http://localhost:3000
 ```
 
-En développement :
+For development:
 
 ```text
 API:
@@ -1284,9 +1284,9 @@ http://127.0.0.1:8000/docs
 
 ---
 
-# 41. Ce que le Front-End n'a pas besoin de gérer
+# 41. What the Front-End Does Not Need to Manage
 
-Le Front-End ne doit pas gérer directement :
+The Front-End does not need to directly manage:
 
 * ChromaDB
 * PostgreSQL
@@ -1294,16 +1294,16 @@ Le Front-End ne doit pas gérer directement :
 * LangGraph
 * Ollama
 * Qwen3
-* génération des embeddings
-* recherche vectorielle
+* embedding generation
+* vector search
 
-Ces éléments sont internes au backend.
+These components are internal to the backend.
 
-Le Front-End communique principalement avec l'API REST.
+The Front-End mainly communicates with the REST API.
 
 ---
 
-# 42. Architecture globale
+# 42. Global Architecture
 
 ```text
                          FRONT-END
@@ -1333,77 +1333,77 @@ Le Front-End communique principalement avec l'API REST.
                  └──────────────┬──────────────┘
                                 │
                                 ▼
-                         Réponse au Front-End
+                         Response to Front-End
 ```
 
 ---
 
-# 43. Résumé des endpoints
+# 43. Endpoint Summary
 
-| Méthode | Endpoint                                 | Fonction                    |
-| ------- | ---------------------------------------- | --------------------------- |
-| GET     | `/api/v1/health`                         | Vérifier l'état du backend  |
-| GET     | `/api/v1/rag/stats`                      | Statistiques du moteur RAG  |
-| POST    | `/api/v1/sessions`                       | Créer une conversation      |
-| GET     | `/api/v1/sessions/{session_id}/messages` | Récupérer l'historique      |
-| POST    | `/api/v1/rag/search`                     | Effectuer une recherche RAG |
-| POST    | `/api/v1/chat`                           | Envoyer une question à l'IA |
+| Method | Endpoint                                 | Purpose                       |
+| ------ | ---------------------------------------- | ----------------------------- |
+| GET    | `/api/v1/health`                         | Check backend status          |
+| GET    | `/api/v1/rag/stats`                      | RAG engine statistics         |
+| POST   | `/api/v1/sessions`                       | Create a conversation         |
+| GET    | `/api/v1/sessions/{session_id}/messages` | Retrieve conversation history |
+| POST   | `/api/v1/rag/search`                     | Perform a RAG search          |
+| POST   | `/api/v1/chat`                           | Send a question to the AI     |
 
 ---
 
-# 44. Endpoint principal pour le développeur Front-End
+# 44. Main Endpoint for Front-End Developers
 
-Dans la majorité des cas, le Front-End utilisera principalement :
+In most cases, the Front-End will mainly use:
 
 ```text
 POST /api/v1/sessions
 ```
 
-puis :
+then:
 
 ```text
 GET /api/v1/sessions/{session_id}/messages
 ```
 
-et :
+and:
 
 ```text
 POST /api/v1/chat
 ```
 
-Le workflow principal est donc :
+The main workflow is therefore:
 
 ```text
-Créer session
+Create session
      │
      ▼
-Obtenir session_id
+Get session_id
      │
      ▼
-Stocker session_id
+Store session_id
      │
      ▼
-Envoyer messages
+Send messages
      │
      ▼
 POST /chat
      │
      ▼
-Afficher answer
+Display answer
      │
      ▼
-Continuer la conversation
+Continue conversation
 ```
 
 ---
 
-# 45. Important : session_id
+# 45. Important: `session_id`
 
-Le `session_id` est essentiel pour la mémoire.
+The `session_id` is essential for conversation memory.
 
-Le Front-End doit conserver l'identifiant de la conversation.
+The Front-End must keep the conversation identifier.
 
-Exemple :
+Example:
 
 ```javascript
 localStorage.setItem(
@@ -1412,14 +1412,14 @@ localStorage.setItem(
 );
 ```
 
-Lors des prochains messages :
+For subsequent messages:
 
 ```javascript
 const sessionId =
   localStorage.getItem("session_id");
 ```
 
-Puis :
+Then:
 
 ```javascript
 {
@@ -1428,27 +1428,27 @@ Puis :
 }
 ```
 
-Cela permet au backend de retrouver l'historique correspondant.
+This allows the backend to retrieve the history associated with the conversation.
 
 ---
 
-# 46. Séparation Front-End / Backend
+# 46. Front-End / Backend Separation
 
-Le principe recommandé est :
+The recommended principle is:
 
 ```text
 Frontend
     ↓
-API REST
+REST API
     ↓
 Backend
     ↓
 AI / Database / RAG
 ```
 
-Le Front-End ne doit pas avoir accès directement aux services internes.
+The Front-End should not directly access internal services.
 
-Par exemple, éviter :
+For example, avoid:
 
 ```text
 Frontend → PostgreSQL
@@ -1456,17 +1456,17 @@ Frontend → ChromaDB
 Frontend → Ollama
 ```
 
-Préférer :
+Prefer:
 
 ```text
-Frontend → FastAPI → services internes
+Frontend → FastAPI → Internal services
 ```
 
 ---
 
-# 47. Développement local
+# 47. Local Development
 
-Pour travailler avec le Front-End :
+To work with the Front-End:
 
 ### Terminal 1 — Ollama
 
@@ -1491,13 +1491,13 @@ python -m uvicorn app.main:app `
 
 ### Terminal 3 — Front-End
 
-Exemple :
+Example:
 
 ```bash
 npm run dev
 ```
 
-Architecture :
+Architecture:
 
 ```text
 Frontend
@@ -1515,27 +1515,27 @@ Backend
 
 ---
 
-# 48. Checklist pour le développeur Front-End
+# 48. Front-End Developer Checklist
 
-Avant l'intégration :
+Before integration:
 
-* [ ] Backend démarré
-* [ ] Ollama démarré
-* [ ] `qwen3:1.7b` disponible
-* [ ] PostgreSQL démarré
-* [ ] RAG indexé
-* [ ] `/api/v1/health` retourne `ok`
-* [ ] `/api/v1/rag/stats` retourne `ready: true`
-* [ ] CORS configuré pour le domaine Front-End
-* [ ] Création d'une session testée
-* [ ] Historique testé
-* [ ] `/api/v1/chat` testé
-* [ ] Gestion des erreurs implémentée
-* [ ] `session_id` conservé côté Front-End
+* [ ] Backend started
+* [ ] Ollama started
+* [ ] `qwen3:1.7b` available
+* [ ] PostgreSQL started
+* [ ] RAG index built
+* [ ] `/api/v1/health` returns `ok`
+* [ ] `/api/v1/rag/stats` returns `ready: true`
+* [ ] CORS configured for the Front-End domain
+* [ ] Session creation tested
+* [ ] Conversation history tested
+* [ ] `/api/v1/chat` tested
+* [ ] Error handling implemented
+* [ ] `session_id` stored on the Front-End
 
 ---
 
-# 49. Résumé technique
+# 49. Technical Summary
 
 **Backend**
 
@@ -1547,7 +1547,7 @@ SQLAlchemy
 PostgreSQL
 ```
 
-**IA**
+**AI**
 
 ```text
 LangGraph
@@ -1572,7 +1572,7 @@ JSON
 CORS
 ```
 
-**Mémoire**
+**Memory**
 
 ```text
 PostgreSQL
@@ -1585,9 +1585,9 @@ LangGraph
 
 # 50. Conclusion
 
-DiagLowCost expose une API REST permettant à un Front-End de construire une interface de chatbot complète sans avoir à gérer directement les composants IA.
+DiagLowCost exposes a REST API that allows a Front-End to build a complete chatbot interface without having to directly manage the AI components.
 
-Le développeur Front-End doit principalement intégrer :
+The Front-End developer mainly needs to integrate:
 
 ```text
 POST /api/v1/sessions
@@ -1595,27 +1595,27 @@ GET  /api/v1/sessions/{session_id}/messages
 POST /api/v1/chat
 ```
 
-Les autres endpoints sont principalement utiles pour :
+The other endpoints are mainly useful for:
 
 ```text
 Health
 RAG monitoring
-Recherche documentaire
-Administration / diagnostic
+Document retrieval
+Administration / diagnostics
 ```
 
-L'architecture permet ainsi de garder une séparation claire entre :
+The architecture provides a clear separation between:
 
 ```text
-Interface utilisateur
+User Interface
         ↓
 API
         ↓
-Logique métier
+Business Logic
         ↓
 RAG + LangGraph + LLM
         ↓
-Bases de données
+Databases
 ```
 
-Le système est conçu pour permettre des conversations persistantes, une recherche documentaire sémantique et une génération de réponses avec **Qwen3 exécuté localement via Ollama**.
+The system is designed to support persistent conversations, semantic document retrieval, and response generation using **Qwen3 running locally through Ollama**.
